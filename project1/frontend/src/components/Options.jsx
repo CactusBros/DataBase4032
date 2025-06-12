@@ -1,48 +1,51 @@
 import { useState } from "react";
 
+const API_BASE_URL = "http://127.0.0.1:5000";
+
 const Options = ({ onQuery }) => {
-  // Mock data for demonstration purposes
-  const mockStudentData = [
-    { id: '98101234', name: 'مریم رضایی', credits: 18, semester: 'پاییز ۱۴۰۲' },
-    { id: '99204567', name: 'علی حسینی', credits: 16, semester: 'پاییز ۱۴۰۲' },
-    { id: '97308910', name: 'زهرا احمدی', credits: 20, semester: 'پاییز ۱۴۰۲' },
-  ];
-
-  const mockCourseData = [
-      { code: 'CE241', name: 'پایگاه داده', enrolled: 89 },
-      { code: 'CS101', name: 'مبانی برنامه‌نویسی', enrolled: 152 },
-      { code: 'EE305', name: 'مدار منطقی', enrolled: 65 },
-  ];
-
   const [studentIdForGpa, setStudentIdForGpa] = useState("");
   const [semester, setSemester] = useState("");
   const [studentIdForDelete, setStudentIdForDelete] = useState("");
 
+  const fetchData = async (url, options = {}) => {
+    try {
+      const response = await fetch(url, options);
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
+      const data = await response.json();
+
+      if (data.length === 0) {
+        onQuery(['پیام'], [{ message: 'نتیجه‌ای یافت نشد.' }]);
+        return;
+      }
+      if (data.length === 1) {
+      const headers = Object.keys(data[0]);
+      onQuery(headers, data);
+      }
+    } catch (error) {
+      console.error("Fetch error:", error);
+      onQuery(['خطا'], [{ message: 'ارتباط با سرور برقرار نشد.' }]);
+    }
+  };
+
   const handleFindStudentGpa = () => {
     if (!studentIdForGpa.trim()) return;
-    onQuery(
-      ['شماره دانشجویی', 'نام', 'معدل کل'],
-      [{ id: studentIdForGpa, name: 'دانشجوی آزمایشی', gpa: '17.5' }]
-    );
+    fetchData(`${API_BASE_URL}/students/gpa?student_id=${studentIdForGpa}`);
   };
 
   const handleFindStudentsWithManyCredits = () => {
-    onQuery(
-      ['شماره دانشجویی', 'نام دانشجو', 'تعداد واحد', 'ترم'],
-      mockStudentData
-    );
+    if (!semester.trim()) return;
+    fetchData(`${API_BASE_URL}/students/heavy-load/${semester}`);
   };
 
   const handleFindPopularCourses = () => {
-    onQuery(
-      ['کد درس', 'نام درس', 'تعداد دانشجویان'],
-      mockCourseData
-    );
+    fetchData(`${API_BASE_URL}/courses/popular`);
   };
 
   const handleDeleteStudent = () => {
     if (!studentIdForDelete.trim()) return;
-    onQuery(['پیام'], [{ message: `دانشجو با شماره ${studentIdForDelete} حذف شد.` }]);
+    fetchData(`${API_BASE_URL}/student/delete/${studentIdForDelete}`, { method: 'DELETE' });
   };
 
   return (
@@ -52,9 +55,7 @@ const Options = ({ onQuery }) => {
           گزینه‌های جستجو و مدیریت
         </h2>
       </div>
-
       <div className="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-5xl mx-auto">
-        {/* Card 1: Search GPA */}
         <div className="text-right p-4 rounded-xl flex flex-col w-full">
           <h3 className="text-lg font-bold mb-3 text-blue-900 pb-2 border-b border-gray-300">
             جستجوی معدل دانشجو
@@ -66,8 +67,6 @@ const Options = ({ onQuery }) => {
             </div>
           </div>
         </div>
-
-        {/* Card 2: Students with Over 15 Credits */}
         <div className="text-right p-4 rounded-xl flex flex-col w-full">
           <h3 className="text-lg font-bold mb-3 text-blue-900 pb-2 border-b border-gray-300">
             دانشجویان با بیش از ۱۵ واحد
@@ -79,8 +78,6 @@ const Options = ({ onQuery }) => {
             </div>
           </div>
         </div>
-
-        {/* Card 3: Popular Courses */}
         <div className="text-right p-4 rounded-xl flex flex-col w-full">
           <h3 className="text-lg font-bold mb-3 text-blue-900 pb-2 border-b border-gray-300">
             درس‌های محبوب
@@ -90,8 +87,6 @@ const Options = ({ onQuery }) => {
             <button onClick={handleFindPopularCourses} className="w-full bg-blue-900 hover:bg-blue-800 text-white font-semibold py-2 px-4 rounded-md transition-all duration-300 shadow-md hover:shadow-blue-500/40 text-sm">تولید گزارش</button>
           </div>
         </div>
-
-        {/* Card 4: Delete Student Record */}
         <div className="text-right p-4 rounded-xl flex flex-col w-full">
           <h3 className="text-lg font-bold mb-3 text-red-800 pb-2 border-b border-red-300">
             حذف دانشجو
@@ -108,4 +103,5 @@ const Options = ({ onQuery }) => {
     </div>
   );
 };
+
 export default Options;
