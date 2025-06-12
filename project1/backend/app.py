@@ -1,4 +1,4 @@
-from flask import Flask, jsonify
+from flask import Flask, jsonify, request, abort
 from flask_sqlalchemy import SQLAlchemy
 from sqlalchemy import text
 from util import load_queries
@@ -49,13 +49,17 @@ def home():
 
 @app.route('/students/gpa')
 def get_student_gpa():
-    # print("query: ", queries['get_student_gpa'])
-    result = db.session.execute(text(queries['get_student_gpa']))
+    student_id = request.args.get('student_id', type=int)
+    if student_id is None:
+        return abort(400, description="Missing required query parameter 'student_id'")
+
+    result = db.session.execute(
+        text(queries['get_student_gpa']),
+        {'student_id': student_id}
+    )
     rows = [dict(row._mapping) for row in result]
-    # print("Result rows:")
-    # for row in rows:
-    #     print(row)
     return jsonify(rows)
+
 
 
 @app.route('/students/heavy-load/<term>')
