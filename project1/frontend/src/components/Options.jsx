@@ -1,0 +1,111 @@
+import { useState } from "react";
+
+const Options = ({ onQuery }) => {
+  // Mock data for demonstration purposes
+  const mockStudentData = [
+    { id: '98101234', name: 'مریم رضایی', credits: 18, semester: 'پاییز ۱۴۰۲' },
+    { id: '99204567', name: 'علی حسینی', credits: 16, semester: 'پاییز ۱۴۰۲' },
+    { id: '97308910', name: 'زهرا احمدی', credits: 20, semester: 'پاییز ۱۴۰۲' },
+  ];
+
+  const mockCourseData = [
+      { code: 'CE241', name: 'پایگاه داده', enrolled: 89 },
+      { code: 'CS101', name: 'مبانی برنامه‌نویسی', enrolled: 152 },
+      { code: 'EE305', name: 'مدار منطقی', enrolled: 65 },
+  ];
+
+  const [studentIdForGpa, setStudentIdForGpa] = useState("");
+  const [semester, setSemester] = useState("");
+  const [studentIdForDelete, setStudentIdForDelete] = useState("");
+
+  const handleFindStudentGpa = () => {
+    if (!studentIdForGpa.trim()) return;
+    onQuery(
+      ['شماره دانشجویی', 'نام', 'معدل کل'],
+      [{ id: studentIdForGpa, name: 'دانشجوی آزمایشی', gpa: '17.5' }]
+    );
+  };
+
+  const handleFindStudentsWithManyCredits = () => {
+    onQuery(
+      ['شماره دانشجویی', 'نام دانشجو', 'تعداد واحد', 'ترم'],
+      mockStudentData
+    );
+  };
+
+  const handleFindPopularCourses = () => {
+    onQuery(
+      ['کد درس', 'نام درس', 'تعداد دانشجویان'],
+      mockCourseData
+    );
+  };
+
+  const handleDeleteStudent = () => {
+    if (!studentIdForDelete.trim()) return;
+    onQuery(['پیام'], [{ message: `دانشجو با شماره ${studentIdForDelete} حذف شد.` }]);
+  };
+
+  return (
+    <div className="text-black p-4 sm:p-6 font-sans w-full mx-auto my-8">
+      <div className="text-center mb-8">
+        <h2 className="text-3xl sm:text-4xl font-extrabold text-blue-900">
+          گزینه‌های جستجو و مدیریت
+        </h2>
+      </div>
+
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-5xl mx-auto">
+        {/* Card 1: Search GPA */}
+        <div className="text-right p-4 rounded-xl flex flex-col w-full">
+          <h3 className="text-lg font-bold mb-3 text-blue-900 pb-2 border-b border-gray-300">
+            جستجوی معدل دانشجو
+          </h3>
+          <div className="flex-grow space-y-3 mt-2">
+            <div className="flex flex-col sm:flex-row-reverse gap-2">
+              <input type="text" value={studentIdForGpa} onChange={(e) => setStudentIdForGpa(e.target.value)} placeholder="شماره دانشجویی" className="flex-grow w-full bg-gray-200 text-black placeholder-gray-600 rounded-md px-3 py-2 border border-gray-400 focus:ring-2 focus:ring-blue-500 focus:outline-none transition text-sm text-right"/>
+              <button onClick={handleFindStudentGpa} className="w-full sm:w-auto bg-blue-900 hover:bg-blue-800 text-white font-semibold py-2 px-4 rounded-md transition-all duration-300 shadow-md hover:shadow-blue-500/40 text-sm">جستجو</button>
+            </div>
+          </div>
+        </div>
+
+        {/* Card 2: Students with Over 15 Credits */}
+        <div className="text-right p-4 rounded-xl flex flex-col w-full">
+          <h3 className="text-lg font-bold mb-3 text-blue-900 pb-2 border-b border-gray-300">
+            دانشجویان با بیش از ۱۵ واحد
+          </h3>
+          <div className="flex-grow space-y-3 mt-2">
+            <div className="flex flex-col sm:flex-row-reverse gap-2">
+              <input type="text" value={semester} onChange={(e) => setSemester(e.target.value)} placeholder="نام ترم (مثال: پاییز ۱۴۰۲)" className="flex-grow w-full bg-gray-200 text-black placeholder-gray-600 rounded-md px-3 py-2 border border-gray-400 focus:ring-2 focus:ring-blue-500 focus:outline-none transition text-sm text-right"/>
+              <button onClick={handleFindStudentsWithManyCredits} className="w-full sm:w-auto bg-blue-900 hover:bg-blue-800 text-white font-semibold py-2 px-4 rounded-md transition-all duration-300 shadow-md hover:shadow-blue-500/40 text-sm">جستجو</button>
+            </div>
+          </div>
+        </div>
+
+        {/* Card 3: Popular Courses */}
+        <div className="text-right p-4 rounded-xl flex flex-col w-full">
+          <h3 className="text-lg font-bold mb-3 text-blue-900 pb-2 border-b border-gray-300">
+            درس‌های محبوب
+          </h3>
+          <div className="flex-grow flex flex-col space-y-3 mt-2">
+            <p className="text-gray-600 text-sm">پیدا کردن دروسی که بیش از ۵۰ دانشجو اخذ کرده‌اند.</p>
+            <button onClick={handleFindPopularCourses} className="w-full bg-blue-900 hover:bg-blue-800 text-white font-semibold py-2 px-4 rounded-md transition-all duration-300 shadow-md hover:shadow-blue-500/40 text-sm">تولید گزارش</button>
+          </div>
+        </div>
+
+        {/* Card 4: Delete Student Record */}
+        <div className="text-right p-4 rounded-xl flex flex-col w-full">
+          <h3 className="text-lg font-bold mb-3 text-red-800 pb-2 border-b border-red-300">
+            حذف دانشجو
+          </h3>
+          <div className="flex-grow space-y-3 mt-2">
+            <p className="text-red-700 text-sm">هشدار: این عمل دائمی و غیرقابل بازگشت است.</p>
+            <div className="flex flex-col sm:flex-row-reverse gap-2">
+                <input type="text" value={studentIdForDelete} onChange={(e) => setStudentIdForDelete(e.target.value)} placeholder="شماره دانشجویی جهت حذف" className="flex-grow w-full bg-red-100 text-black placeholder-red-500 rounded-md px-3 py-2 border border-red-400 focus:ring-2 focus:ring-red-500 focus:outline-none transition text-sm text-right"/>
+                <button onClick={handleDeleteStudent} className="w-full sm:w-auto bg-red-700 hover:bg-red-600 text-white font-semibold py-2 px-4 rounded-md transition-all duration-300 shadow-md hover:shadow-red-500/40 text-sm">حذف</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+};
+export default Options;
