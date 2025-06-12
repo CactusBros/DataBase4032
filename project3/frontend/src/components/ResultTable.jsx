@@ -1,13 +1,13 @@
 const ResultsTable = ({ headers, data }) => {
     if (!data || data.length === 0) {
         return (
-            <div className="w-full max-w-5xl mx-auto mt-10 text-center p-8 text-gray-500 font-sans">
+            <div className="w-full max-w-5xl mx-auto mt-10 text-center p-8 text-gray-500 font-iran">
                 <p>نتیجه‌ای برای نمایش وجود ندارد. لطفاً یک کوئری را اجرا کنید.</p>
             </div>
         );
     }
     return (
-        <div className="w-full max-w-5xl mx-auto my-10 px-4 font-sans">
+        <div className="w-full max-w-5xl mx-auto my-10 px-4 font-iran">
             <div className="overflow-x-auto rounded-lg border border-gray-300 shadow-md">
                 <table className="min-w-full bg-white text-right">
                     <thead className="bg-gray-100">
