@@ -14,7 +14,7 @@ function App() {
   };
 
   return (
-    <main>
+    <main className="font-iran">
       <Hero />
       <Options onQuery={handleQueryResults} />
       <ResultsTable headers={tableHeaders} data={tableData} />
