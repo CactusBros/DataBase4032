@@ -1,33 +1,43 @@
 import { useState } from "react";
 
-const Options = ({ onQuery }) => {
-  const mockPopularRestaurantData = [
-    { region: "شمال شهر", restaurant: "رستوران ایتالیایی روما" },
-    { region: "مرکز شهر", restaurant: "کبابی اصیل" },
-    { region: "غرب", restaurant: "فست فود سیب" },
-  ];
-  const mockAvgDeliveryTimeData = [
-    { restaurant: "فست فود سیب", avgTime: "۲۵ دقیقه" },
-    { restaurant: "کافه نادری", avgTime: "۱۸ دقیقه" },
-    { restaurant: "رستوران ایتالیایی روما", avgTime: "۳۵ دقیقه" },
-  ];
-  const mockTopRatersData = [
-    { customer: "کیانوش حقیقی", restaurant: "کافه نادری", rating: "۵" },
-    { customer: "پریسا عظیمی", restaurant: "کافه نادری", rating: "۵" },
-  ];
+const API_BASE_URL = "http://127.0.0.1:5000";
 
-  const [region, setRegion] = useState("");
+const Options = ({ onQuery }) => {
   const [restaurantName, setRestaurantName] = useState("");
 
-  const handlePopularRestaurant = () =>
-    onQuery(["منطقه", "محبوب‌ترین رستوران"], mockPopularRestaurantData);
-  const handleAvgDeliveryTime = () =>
-    onQuery(["نام رستوران", "میانگین زمان تحویل"], mockAvgDeliveryTimeData);
-  const handleTopRaters = () =>
-    onQuery(["نام مشتری", "رستوران", "امتیاز"], mockTopRatersData);
+  const fetchData = async (url) => {
+    try {
+      const response = await fetch(url);
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
+      const data = await response.json();
+
+      if (data && data.length > 0) {
+        const headers = Object.keys(data[0]);
+        onQuery(headers, data);
+      } else {
+        onQuery(["پیام"], [{ message: "نتیجه‌ای برای نمایش یافت نشد." }]);
+      }
+    } catch (error) {
+      console.error("Fetch error:", error);
+      onQuery(["خطا"], [{ message: "ارتباط با سرور برقرار نشد." }]);
+    }
+  };
+
+  const handlePopularRestaurant = () => fetchData(`${API_BASE_URL}/restaurants/popular-by-region`);
+  const handleAvgDeliveryTime = () => fetchData(`${API_BASE_URL}/restaurants/avg-delivery-time`);
+
+  const handleTopRaters = () => {
+    if (!restaurantName.trim()) {
+      onQuery(["پیام"], [{ message: "لطفاً نام رستوران را وارد کنید." }]);
+      return;
+    }
+    fetchData(`${API_BASE_URL}/restaurants/top-raters/${restaurantName}`);
+  };
 
   return (
-    <div className="text-black p-4 sm:p-6 font-sans w-full mx-auto my-8">
+    <div className="text-black p-4 sm:p-6 font-iran w-full mx-auto my-8">
       <div className="text-center mb-8">
         <h2 className="text-3xl sm:text-4xl font-extrabold text-yellow-900">
           گزارشات سامانه سفارش غذا
@@ -36,18 +46,14 @@ const Options = ({ onQuery }) => {
       <div className="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-6xl mx-auto">
         <div className="text-right p-4 rounded-xl flex flex-col w-full">
           <h3 className="text-lg font-bold mb-3 text-yellow-900 pb-2 border-b border-gray-300">
-            محبوب‌ ترین رستوران منطقه
+            محبوب‌ترین رستوران در هر منطقه
           </h3>
-
-          <input
-            type="text"
-            onChange={(e) => setRegion(e.target.value)}
-            placeholder="نام منطقه (اختیاری)"
-            className="w-full bg-gray-200 text-black placeholder-gray-600 rounded-md px-3 py-2 border border-gray-400 focus:ring-2 focus:ring-blue-500 focus:outline-none transition text-sm text-right"
-          />
+          <p className="text-gray-600 text-sm flex-grow mb-3">
+            نمایش پرطرفدارترین رستوران به تفکیک هر منطقه شهری.
+          </p>
           <button
             onClick={handlePopularRestaurant}
-            className="w-full mt-auto bg-yellow-900 hover:bg-yellow-700 text-white font-semibold py-2 px-4 rounded-md transition-all duration-300 shadow-md hover:shadow-blue-500/40 text-sm"
+            className="w-full mt-auto bg-yellow-800 hover:bg-yellow-700 text-white font-semibold py-2 px-4 rounded-md transition-all duration-300 shadow-md hover:shadow-yellow-500/40 text-sm"
           >
             نمایش گزارش
           </button>
@@ -56,28 +62,33 @@ const Options = ({ onQuery }) => {
           <h3 className="text-lg font-bold mb-3 text-yellow-900 pb-2 border-b border-gray-300">
             میانگین زمان تحویل
           </h3>
-
+          <p className="text-gray-600 text-sm flex-grow mb-3">
+            محاسبه میانگین زمان تحویل سفارش برای هر رستوران.
+          </p>
           <button
             onClick={handleAvgDeliveryTime}
-            className="w-full mt-auto bg-yellow-900 hover:bg-yellow-700 text-white font-semibold py-2 px-4 rounded-md transition-all duration-300 shadow-md hover:shadow-blue-500/40 text-sm"
+            className="w-full mt-auto bg-yellow-800 hover:bg-yellow-700 text-white font-semibold py-2 px-4 rounded-md transition-all duration-300 shadow-md hover:shadow-yellow-500/40 text-sm"
           >
             محاسبه
           </button>
         </div>
-        <div className="text-right p-4 rounded-xl flex flex-col w-full h-auto gap-2">
+        <div className="text-right p-4 rounded-xl flex flex-col w-full">
           <h3 className="text-lg font-bold mb-3 text-yellow-900 pb-2 border-b border-gray-300">
-            لیست مشتریانی که به یک رستوران خاص امتیاز کامل داده‌اند
+            مشتریان با امتیاز ۵
           </h3>
-
+          <p className="text-gray-600 text-sm flex-grow mb-3">
+            لیست مشتریانی که به یک رستوران خاص امتیاز کامل داده‌اند.
+          </p>
           <input
             type="text"
+            value={restaurantName}
             onChange={(e) => setRestaurantName(e.target.value)}
-            placeholder="نام رستوران"
-            className="w-full bg-gray-200 text-black placeholder-gray-600 rounded-md px-3 py-2 border border-gray-400 focus:ring-2 focus:ring-blue-500 focus:outline-none transition text-sm text-right"
+            placeholder="نام رستوران را وارد کنید"
+            className="w-full bg-gray-200 text-black placeholder-gray-600 rounded-md px-3 py-2 border border-gray-400 focus:ring-2 focus:ring-yellow-500 focus:outline-none transition text-sm text-right mb-3"
           />
           <button
             onClick={handleTopRaters}
-            className="w-full mt-auto bg-yellow-900 hover:bg-yellow-700 text-white font-semibold py-2 px-4 rounded-md transition-all duration-300 shadow-md hover:shadow-blue-500/40 text-sm"
+            className="w-full mt-auto bg-yellow-800 hover:bg-yellow-700 text-white font-semibold py-2 px-4 rounded-md transition-all duration-300 shadow-md hover:shadow-yellow-500/40 text-sm"
           >
             نمایش لیست
           </button>
