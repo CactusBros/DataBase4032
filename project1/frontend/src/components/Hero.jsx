@@ -1,12 +1,16 @@
-import Navbar from "./Navbar";
-
 const Hero = () => {
   return (
-    <section>
-      <Navbar/>
-      <div className="bg-[url('/images/hero.jpg')] bg-no-repeat w-100% h-[75vh] flex items-center justify-center">
-        <h1 className="bg-amber-100/80 text-8xl text-blue-900 p-6 rounded-4xl">
-          Project Number One
+    <section className="relative w-full h-[75vh] overflow-hidden">
+      <div
+        className="absolute inset-0 bg-[url('/images/hero.jpg')] bg-no-repeat bg-cover bg-center"
+        aria-hidden="true"
+      />
+
+      <div className="absolute inset-0 bg-black/30 backdrop-blur-sm " aria-hidden="true" />
+
+      <div className="relative h-full flex items-center justify-center text-right">
+        <h1 className="text-5xl font-iran md:text-7xl lg:text-8xl font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-cyan-300 to-blue-600 p-6 rounded-2xl">
+          پروژه مدیریت دانشجویان دانشگاه هرمزگان
         </h1>
       </div>
     </section>
