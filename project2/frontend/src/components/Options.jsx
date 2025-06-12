@@ -50,7 +50,7 @@ const Options = ({ onQuery }) => {
   };
 
   return (
-    <div className="text-black p-4 sm:p-6 font-sans w-full mx-auto my-8">
+    <div className="text-black p-4 sm:p-6 font-iran w-full mx-auto my-8">
       <div className="text-center mb-8">
         <h2 className="text-3xl sm:text-4xl font-extrabold text-orange-900">
           گزینه‌های سامانه فروشگاه
