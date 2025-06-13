@@ -42,6 +42,45 @@ make run
   - The backend API will be running at `http://127.0.0.1:5000`
   - The frontend application will be available at `http://localhost:5173` (or the next available port).
 
+### 📝 What To Do (Your Task)
+
+Your main task is to write the SQL queries that power the backend API. You will need to edit the backend/queries.sql file.
+
+For each feature of the application, you must write the corresponding SQL query. It's crucial that you introduce each query with a special comment that names it, like so:
+SQL
+
+```sql
+-- name: your_query_name
+SELECT * FROM ...
+```
+
+This name is how the Python application finds and executes your code.
+Required Queries
+
+You need to implement the following queries inside backend/queries.sql:
+
+    -- name: late_members
+        Goal: Find all library members who have more than 3 late book returns on record.
+        Parameters: None.
+        Output: It should return the member's name and the total count of their late returns (late_returns).
+
+    -- name: popular_books
+        Goal: Identify books that have been borrowed more than 5 times.
+        Parameters: None.
+        Output: It should return the book's title, author, and the total number of times it has been borrowed (times_borrowed).
+
+    -- name: avg_loan_time
+        Goal: Calculate the average number of days each book is kept by a member before being returned.
+        Parameters: None.
+        Output: It should return the book's title and the average loan duration in days (avg_days).
+
+    -- name: unpaid_fines
+        Goal: Find the total amount of unpaid fines for each member.
+        Parameters: None.
+        Output: It should return the member's name and their total outstanding fine amount (total_fine).
+
+Hint: To write these queries, study the relationships between the member, book, loan, and fine tables in backend/schema.sql.
+
 ### 🌐 API Endpoints
 
 | Method | Endpoint                | Description                                        |

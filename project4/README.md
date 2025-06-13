@@ -41,6 +41,40 @@ make run
   - The backend API will be running at `http://127.0.0.1:5000`
   - The frontend application will be available at `http://localhost:5173` (or the next available port).
 
+### 📝 What To Do (Your Task)
+
+Your main task is to write the SQL queries that power the backend API. You will need to edit the backend/queries.sql file.
+
+For each feature of the application, you must write the corresponding SQL query. It's crucial that you introduce each query with a special comment that names it, like so:
+SQL
+
+```sql
+-- name: your_query_name
+SELECT * FROM ...
+```
+
+This name is how the Python application finds and executes your code.
+Required Queries
+
+You need to implement the following queries inside backend/queries.sql:
+
+    -- name: filled_flights
+        Goal: Find all flights where the number of reservations is equal to or greater than the aircraft's capacity.
+        Parameters: None.
+        Output: It should return the flight_number, destination, departure_time, and the aircraft's capacity.
+
+    -- name: frequent_flyers
+        Goal: Identify passengers who have taken more than 3 flights in the last month.
+        Parameters: None.
+        Output: It should return the passenger's name and their total number of flights (flight_count).
+
+    -- name: occupancy_rate
+        Goal: Calculate the percentage of seats filled for each destination.
+        Parameters: None.
+        Output: It should return the flight destination and the calculated occupancy_percentage.
+
+Hint: To write these queries, study the relationships between the passenger, aircraft, flight, and reservation tables in backend/schema.sql.
+
 ### 🌐 API Endpoints
 
 | Method | Endpoint                      | Description                                                  |

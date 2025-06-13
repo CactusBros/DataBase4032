@@ -105,17 +105,37 @@ Once running, open your web browser and navigate to the frontend URL to use the 
 
 ## 📝 What To Do (Your Task)
 
-This project is fully functional but uses `makefile`s with placeholder comments for automation. Your main task is to **complete the `makefile` scripts** to fully automate the setup and execution workflow as described in this README.
+Your main task is to write the SQL queries that power the backend API. You will need to edit the backend/queries.sql file, which is currently empty.
 
-1.  **Complete `project1/makefile`:**
-    * Implement the `setup` target to create the Python virtual environment and install dependencies for both backend and frontend.
-    * Implement `init-db`, `mock-data`, and `reset-db` to call the corresponding targets in the `backend/makefile`.
-    * Implement `run`, `backend`, and `frontend` targets to launch the respective servers.
+For each feature of the application, you must write the corresponding SQL query. It's crucial that you introduce each query with a special comment that names it, like so:
+SQL
 
-2.  **Explore and Extend (Optional):**
-    * Add new API endpoints and queries to the backend.
-    * Create new UI components in the frontend to consume the new endpoints.
-    * Improve error handling and user feedback.
+```sql
+-- name: your_query_name
+SELECT * FROM ...
+```
+
+This name is how the Python application finds and executes your code.
+Required Queries
+
+You need to implement the following queries inside backend/queries.sql:
+
+    -- name: get_student_gpa
+        Goal: This query should calculate the GPA for a single student.
+        It will receive a :student_id as a parameter.
+        It should return the student's name, ID, and their average grade (gpa).
+
+    -- name: students_with_many_units
+        Goal: This query should find all students who have taken more than 15 units in a specific term.
+        It will receive a :term as a parameter.
+        It should return the student's name, ID, and the total units they have taken in that term.
+
+    -- name: popular_courses
+        Goal: This query should find all courses that have more than 50 enrolled students.
+        It takes no parameters.
+        It should return the course title, course ID, and the total number of students enrolled.
+
+Hint: To write these queries successfully, first study the database structure defined in backend/schema.sql. Understanding the relationships between the student, course, and enrollment tables is the key to solving the task.
 
 ## 🏛️ Project Structure
 

@@ -41,6 +41,40 @@ make run
   - The backend API will be running at `http://127.0.0.1:5000`
   - The frontend application will be available at `http://localhost:5173` (or the next available port).
 
+### 📝 What To Do (Your Task)
+
+Your main task is to write the SQL queries that power the backend API. You will need to edit the backend/queries.sql file.
+
+For each feature of the application, you must write the corresponding SQL query. It's crucial that you introduce each query with a special comment that names it, like so:
+SQL
+
+```sql
+-- name: your_query_name
+SELECT * FROM ...
+```
+
+This name is how the Python application finds and executes your code.
+Required Queries
+
+You need to implement the following queries inside backend/queries.sql:
+
+    -- name: most_popular_item
+        Goal: Find the single food item that has been ordered the most times across all orders.
+        Parameters: None.
+        Output: It should return the item's name and the total quantity ordered (total_ordered).
+
+    -- name: top_spending_customers
+        Goal: Identify the top 5 customers who have spent the most money in total.
+        Parameters: None.
+        Output: It should return the customer's name and their total spending (total_spent).
+
+    -- name: sales_by_restaurant
+        Goal: Calculate the total sales revenue for each restaurant.
+        Parameters: None.
+        Output: It should return the restaurant's name and its total sales revenue (total_revenue).
+
+Hint: To write these queries, study the relationships between the customers, restaurants, food_items, orders, and order_items tables in backend/schema.sql.
+
 ### 🌐 API Endpoints
 
 **Note:** The backend code for this project was not available. The following are example endpoints based on a typical food order system.
