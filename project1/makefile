@@ -15,3 +15,8 @@ reset-db:
 run:
 	# run backend and frontend
 
+backend:
+	# todo
+
+frontend:
+	# todo
