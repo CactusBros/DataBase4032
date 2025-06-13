@@ -1,4 +1,7 @@
+# Makefile for Project 5 Backend
 .PHONY: install init-db mock-data run reset
+
+DB_NAME=food_orders.db
 
 install:
 	@echo "📦 Installing dependencies from requirements.txt..."
@@ -6,13 +9,13 @@ install:
 	@echo "✅ Dependencies installed!"
 
 init-db:
-	@echo "🔄 Creating database schema for food_orders.db..."
+	@echo "🔄 Creating database schema for $(DB_NAME)..."
 	@python3 app.py init-db
 	@echo "✅ Database initialized!"
 
 mock-data:
 	@echo "📊 Populating database with mock data..."
-	@sqlite3 food_orders.db < mockdata.sql
+	@sqlite3 $(DB_NAME) < mockdata.sql
 	@echo "✅ Mock data generation complete!"
 
 run:
@@ -21,8 +24,7 @@ run:
 
 reset:
 	@echo "🔥 Resetting the database..."
-	@rm -f food_orders.db
+	@rm -f $(DB_NAME)
 	@$(MAKE) init-db
 	@$(MAKE) mock-data
 	@echo "🎉 Database has been reset and populated."
-
